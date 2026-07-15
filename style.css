@@ -1,0 +1,278 @@
+body {
+    background-color: #f5f7fb;
+}
+
+aside {
+    background-color: white;
+    min-height: 100vh;
+    border-right: 1px solid #ddd;
+}
+
+main {
+    min-height: 100vh;
+    background-color: #f5f7fb;
+}
+
+/* ---------- General ---------- */
+
+body{
+    margin:0;
+    background:#f5f7fb;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar{
+
+    background:white;
+
+    min-height:100vh;
+
+    padding:30px 20px;
+
+    border-right:1px solid #e5e7eb;
+}
+
+/* Logo */
+
+.logo h2{
+
+    font-size:30px;
+
+    margin-bottom:5px;
+
+    font-weight:bold;
+}
+
+.logo p{
+
+    color:gray;
+
+    margin-bottom:35px;
+}
+
+/* Navigation */
+
+nav ul{
+
+    list-style:none;
+
+    padding:0;
+}
+
+nav li{
+
+    margin-bottom:12px;
+}
+
+nav a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+    color:#374151;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    transition:.3s;
+}
+
+nav a:hover{
+
+    background:#eff6ff;
+
+    color:#2563eb;
+}
+
+/* Active Item */
+
+nav li:first-child a{
+    background:#2563eb;
+    color:white;
+    border-left:5px solid #1d4ed8;
+}
+
+/* Button */
+
+.add-btn{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.add-btn:hover{
+
+    background:#1d4ed8;
+}
+
+/* Dashboard */
+
+.dashboard{
+
+    padding:35px;
+}
+
+/* Top Navbar */
+
+.top-navbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+}
+
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+}
+
+.profile i{
+
+    font-size:22px;
+
+    cursor:pointer;
+}
+
+.profile img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+}
+
+.welcome h1{
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.welcome p{
+
+    color:gray;
+
+    margin-bottom:40px;
+}
+
+.cards{
+
+    display:flex;
+
+    gap:25px;
+}
+
+.card-box{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    flex:1;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+.card-box h6{
+
+    color:gray;
+
+    margin-bottom:15px;
+}
+
+.card-box h2{
+
+    font-size:32px;
+
+    font-weight:bold;
+}
+
+.card-box {
+    transition: 0.3s ease;
+}
+
+.card-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,.1);
+}
+
+.charts{
+
+    display:flex;
+
+    gap:25px;
+
+    margin-top:40px;
+}
+
+.chart-card{
+
+    flex:1;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+.chart-card h4{
+
+    margin-bottom:20px;
+}
+
+.transactions{
+
+    margin-top:40px;
+}
+
+.table-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
