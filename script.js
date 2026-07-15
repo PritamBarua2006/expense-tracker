@@ -60,24 +60,43 @@ new Chart(pieCtx, {
 
 });
 
-const expenses = [
+const expenses = [];
 
-    {
-        title: "Pizza",
-        category: "Food",
-        amount: 450,
-        payment: "UPI"
-    }
+const titleInput = document.getElementById("title");
+const categoryInput = document.getElementById("category");
+const amountInput = document.getElementById("amount");
+const paymentInput = document.getElementById("payment");
+const dateInput = document.getElementById("date");
 
-];
 
-expenses.push({
+const saveBtn = document.getElementById("saveExpense");
+saveBtn.addEventListener("click", function(){
 
-    title: "Petrol",
-    category: "Fuel",
-    amount: 2200,
-    payment: "Card"
+    const expense = {
+    title: titleInput.value,
+    category: categoryInput.value,
+    amount: Number(amountInput.value),
+    payment: paymentInput.value,
+    date: date(dateInput.value)
+}
+expenses.push(expense);
+const row = document.createElement("tr");
 
+row.innerHTML = `
+    <td>${expense.date}</td>
+    <td>${expense.category}</td>
+    <td>${expense.title}</td>
+    <td>₹${expense.amount}</td>
+    <td>${expense.payment}</td>
+    <td>
+        <button>Edit</button>
+        <button>Delete</button>
+    </td>
+`;
+
+transactionBody.appendChild(row);
+console.log(expenses);
 });
 
-console.log(expenses);
+const transactionBody = document.getElementById("transactionBody");
+
