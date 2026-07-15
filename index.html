@@ -5,26 +5,328 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
     <link rel="stylesheet" href="./style.css" />
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+    rel="stylesheet">
 </head>
+
+
 <body>
-    <aside class="sidebar">
-        <h1 class="sidebar-title">Expense Tracker</h1>
-        <p class="sidebar-subtitle">Simple personal budget app</p>
-
-        <nav class="sidebar-nav" aria-label="Primary">
-            <a class="nav-item active" href="#dashboard">Dashboard</a>
-            <a class="nav-item" href="#transactions">Transactions</a>
-            <a class="nav-item" href="#income">Income</a>
-            <a class="nav-item" href="#budgets">Budgets</a>
-            <a class="nav-item" href="#reports">Reports</a>
-            <a class="nav-item" href="#settings">Settings</a>
+  <div class="container-fluid">
+    <div class="row">
+      <aside class="col-lg-2 sidebar">
+      <div class="logo">
+        <h2>Expense Tracker</h2>
+        <p>Simple personal budget app</p>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="#">
+              <i class="bi bi-house"></i>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-credit-card"></i>
+                Transactions
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-cash-stack"></i>
+                Income
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-wallet2"></i>
+                Budgets
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-bar-chart"></i>
+                Reports
+            </a>
+          </li>
+          <li>
+            <a href="#">
+                <i class="bi bi-gear"></i>
+                  Settings
+            </a>
+          </li>
+        </ul>
         </nav>
+        <button class="add-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#expenseModal">
+        <i class="bi bi-plus-circle"></i>
+        Add Expense
+      </button>
+      </aside>
 
-        <a class="action-button" href="#add-expense">+ Add expense</a>
 
-        <div class="sidebar-footer">
-            <p>Tip: keep it simple first, then add more features later.</p>
+      <main class="col-lg-10">
+        <div class="dashboard">
+          <header class="top-navbar">
+            <h3>Dashboard</h3>
+            <div class="profile">
+              <i class="bi bi-bell"></i>
+              <img src="./person-circle.svg" alt="Profile">
+            </div>
+          </header>
+          <section class="welcome">
+            <h1>Good Morning, Pritam 👋</h1>
+            <p>Here's your financial summary for this month.</p>
+          </section>
+          <div class="cards">
+              <div class="card-box">
+                <h6>Total Balance</h6>
+                <h2>₹0.00</h2>
+              </div>
+              <div class="card-box">
+                <h6>Expense</h6>
+                <h2>₹0.00</h2>
+              </div>
+              <div class="card-box">
+                <h6>Income</h6>
+                <h2>₹0.00</h2>
+              </div>
+              <div class="card-box">
+                <h6>Savings</h6>
+                <h2>₹0.00</h2>
+              </div>
+            </div>
         </div>
-    </aside>
+        <section class="charts">
+          <div class="chart-card">
+            <h4>Expense Trend</h4>
+            <canvas id="expenseChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Category Breakdown</h4>
+            <canvas id="pieChart"></canvas>
+          </div>
+        </section>
+        <section class="transactions">
+          <div class="table-card">
+            <h4>Recent Transactions</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Title</th>
+                  <th>Amount</th>
+                  <th>Payment</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>12 Jul</td>
+                  <td>Food</td>
+                  <td>Pizza</td>
+                  <td>₹450</td>
+                  <td>UPI</td>
+                  <td>
+                    <button><i class="bi-pencil-square"></i>Edit</button>
+                    <button><i class="bi-trash"></i>Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11 Jul</td>
+                  <td>Fuel</td>
+                  <td>Petrol</td>
+                  <td>₹2200</td>
+                  <td>Card</td>
+                  <td>
+                    <button><i class="bi-pencil-square"></i>Edit</button>
+                    <button><i class="bi-trash"></i>Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10 Jul</td>
+                  <td>Shopping</td>
+                  <td>Shoes</td>
+                  <td>₹3200</td>
+                  <td>Cash</td>
+                  <td>
+                    <button><i class="bi-pencil-square"></i>Edit</button>
+                    <button><i class="bi-trash"></i>Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="budget-section">
+          <div class="budget-card">
+            <h4>Budget Progress</h4>
+            <div class="budget-item">
+              <div class="budget-info">
+                <span>Food</span>
+                <span>80%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-success"
+                  style="width:80%">
+                </div>
+              </div>
+            </div>
+            <div class="budget-item">
+              <div class="budget-info">
+                <span>Travel</span>
+                <span>60%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-primary"
+                  style="width:60%">
+                </div>
+              </div>
+            </div>
+            <div class="budget-item">
+              <div class="budget-info">
+                <span>Shopping</span>
+                <span>95%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-danger"
+                  style="width:95%">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="insight-card">
+          <h4>Quick Insights</h4>
+          <div class="insight">
+            <i class="bi bi-fire"></i>
+            <div>
+              <strong>Highest Expense</strong>
+              <p>Petrol • ₹2200</p>
+            </div>
+          </div>
+          <div class="insight">
+            <i class="bi bi-wallet2"></i>
+            <div>
+              <strong>Highest Income</strong>
+              <p>Salary • ₹25000</p>
+            </div>
+          </div>
+          <div class="insight">
+            <i class="bi bi-piggy-bank"></i>
+            <div>
+              <strong>Total Saved</strong>
+              <p>₹12000 this month</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./script.js"></script>
+
+<div class="modal fade"
+id="expenseModal"
+tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Add Expense
+        </h5>
+        <button type="button"
+        class="btn-close"
+        data-bs-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="title">
+        <div class="mb-3">
+          <label class="form-label">
+            Expense Name
+          </label>
+          <input
+          type="text"
+          class="form-control"
+          id="title"
+          placeholder="Enter expense name"
+          required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            Category
+          </label>
+          <select class="form-select" id="category">
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Shopping</option>
+            <option>Bills</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            Amount
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="amount"
+            required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            Payment Method
+          </label>
+          <select class="form-select" id="payment">
+            <option>UPI</option>
+            <option>Card</option>
+            <option>Cash</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            Date
+          </label>
+          <input type="date"
+          class="form-control"
+          id="date"
+          required>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary"
+        data-bs-dismiss="modal">
+        Cancel
+      </button>
+      <button class="btn btn-primary"
+      id="saveExpense">
+        Save Expense
+      </button>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
+          
+            
+              
+            
+            
+              
+            
+            
+              
+           
