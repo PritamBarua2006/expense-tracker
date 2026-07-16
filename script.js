@@ -62,6 +62,8 @@ new Chart(pieCtx, {
 
 const expenses = [];
 
+let editingIndex = null;
+
 function updateDashboard() {
 
     let totalExpense = 0;
@@ -108,12 +110,48 @@ function addExpenseToTable(expense, index) {
         <td>₹${expense.amount}</td>
         <td>${expense.payment}</td>
         <td>
-            <button class="btn btn-sm btn-primary"> Edit </button>
-            <button class="btn btn-sm btn-danger" data-index="${index}"> Delete </button>
-        </td>
+            <button class="btn btn-sm btn-primary" data-index="${index}"> Edit </button>
+            <button class="btn btn-sm btn-danger" data-index="${index}"> Delete </button> </td>
     `;
 
     transactionBody.appendChild(row);
+
+}
+
+function renderExpenses() {
+
+    transactionBody.innerHTML = "";
+
+    expenses.forEach((expense, index) => {
+
+        addExpenseToTable(expense, index);
+
+    });
+}
+
+function saveExpenses() {
+    localStorage.setItem(
+        "expenses",
+        JSON.stringify(expenses)
+    );
+}
+
+function loadExpenses() {
+
+    const storedExpenses =
+        localStorage.getItem("expenses");
+
+    if (storedExpenses) {
+
+        expenses.push(
+            ...JSON.parse(storedExpenses)
+        );
+
+        renderExpenses();
+
+        updateDashboard();
+
+    }
 
 }
 
@@ -154,9 +192,21 @@ const expense = {
     date: dateInput.value
 };
 
-expenses.push(expense);
+if (editingIndex === null) {
 
-addExpenseToTable(expense, expenses.length - 1);
+    expenses.push(expense);
+
+} else {
+
+    expenses[editingIndex] = expense;
+
+    editingIndex = null;
+
+}
+
+saveExpenses();
+
+renderExpenses();
 
 updateDashboard();
 
@@ -166,9 +216,36 @@ closeModal();
 });
 
 transactionBody.addEventListener("click", function(event){
-    console.log(event.target);
 
+    if (event.target.classList.contains("btn-primary")) {
+
+    editingIndex = Number(event.target.dataset.index);
+
+    const expense = expenses[editingIndex];
+
+    titleInput.value = expense.title;
+    categoryInput.value = expense.category;
+    amountInput.value = expense.amount;
+    paymentInput.value = expense.payment;
+    dateInput.value = expense.date;
+
+    const expenseModal = new bootstrap.Modal(
+        document.getElementById("expenseModal")
+    );
+
+    expenseModal.show();
+
+}
+
+    if (event.target.classList.contains("btn-danger")) {
+        const index = Number(event.target.dataset.index);
+        expenses.splice(index, 1);
+        const row = event.target.parentElement.parentElement;
+        saveExpenses();
+        renderExpenses();
+        updateDashboard();
+    }
 });
 
-
+loadExpenses();
 
