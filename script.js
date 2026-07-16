@@ -74,6 +74,49 @@ function updateDashboard() {
 
 }
 
+function clearForm() {
+
+    titleInput.value = "";
+    amountInput.value = "";
+    dateInput.value = "";
+
+    categoryInput.selectedIndex = 0;
+    paymentInput.selectedIndex = 0;
+
+}
+
+function closeModal() {
+
+    const expenseModal =
+        document.getElementById("expenseModal");
+
+    const modal =
+        bootstrap.Modal.getInstance(expenseModal);
+
+    modal.hide();
+
+}
+
+function addExpenseToTable(expense, index) {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${expense.date}</td>
+        <td>${expense.category}</td>
+        <td>${expense.title}</td>
+        <td>₹${expense.amount}</td>
+        <td>${expense.payment}</td>
+        <td>
+            <button class="btn btn-sm btn-primary"> Edit </button>
+            <button class="btn btn-sm btn-danger" data-index="${index}"> Delete </button>
+        </td>
+    `;
+
+    transactionBody.appendChild(row);
+
+}
+
 const titleInput = document.getElementById("title");
 const categoryInput = document.getElementById("category");
 const amountInput = document.getElementById("amount");
@@ -104,7 +147,7 @@ if (isNaN(amount) || amount <= 0) {
     return;
 }
 const expense = {
-    title: titleInput.value,
+    title: titleInput.value.trim(),
     category: categoryInput.value,
     amount: amount,
     payment: paymentInput.value,
@@ -112,34 +155,19 @@ const expense = {
 };
 
 expenses.push(expense);
-const row = document.createElement("tr");
 
-row.innerHTML = `
-    <td>${expense.date}</td>
-    <td>${expense.category}</td>
-    <td>${expense.title}</td>
-    <td>₹${expense.amount}</td>
-    <td>${expense.payment}</td>
-    <td>
-        <button>Edit</button>
-        <button>Delete</button>
-    </td>
-`;
-
-transactionBody.appendChild(row);
-console.log(expenses);
-
-titleInput.value = "";
-amountInput.value = "";
-dateInput.value = "";
-categoryInput.selectedIndex = 0;
-paymentInput.selectedIndex = 0;
-
-const expenseModal = document.getElementById("expenseModal");
-const modal = bootstrap.Modal.getInstance(expenseModal);
-modal.hide();
+addExpenseToTable(expense, expenses.length - 1);
 
 updateDashboard();
+
+clearForm();
+
+closeModal();
+});
+
+transactionBody.addEventListener("click", function(event){
+    console.log(event.target);
+
 });
 
 
