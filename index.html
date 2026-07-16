@@ -87,11 +87,11 @@
           <div class="cards">
               <div class="card-box">
                 <h6>Total Balance</h6>
-                <h2>₹0.00</h2>
+                 <h2>₹0.00</h2>
               </div>
               <div class="card-box">
                 <h6>Expense</h6>
-                <h2>₹0.00</h2>
+                <h2 id="expenseTotal">₹0.00</h2>
               </div>
               <div class="card-box">
                 <h6>Income</h6>
@@ -127,40 +127,8 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>12 Jul</td>
-                  <td>Food</td>
-                  <td>Pizza</td>
-                  <td>₹450</td>
-                  <td>UPI</td>
-                  <td>
-                    <button><i class="bi-pencil-square"></i>Edit</button>
-                    <button><i class="bi-trash"></i>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>11 Jul</td>
-                  <td>Fuel</td>
-                  <td>Petrol</td>
-                  <td>₹2200</td>
-                  <td>Card</td>
-                  <td>
-                    <button><i class="bi-pencil-square"></i>Edit</button>
-                    <button><i class="bi-trash"></i>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>10 Jul</td>
-                  <td>Shopping</td>
-                  <td>Shoes</td>
-                  <td>₹3200</td>
-                  <td>Cash</td>
-                  <td>
-                    <button><i class="bi-pencil-square"></i>Edit</button>
-                    <button><i class="bi-trash"></i>Delete</button>
-                  </td>
-                </tr>
+              <tbody id="transactionBody">
+                
               </tbody>
             </table>
           </div>
@@ -231,91 +199,96 @@
     </div>
   </div>
 
+
+  <div class="modal fade"
+  id="expenseModal"
+  tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Add Expense
+          </h5>
+          <button type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="expenseForm">
+          <div class="mb-3">
+            <label class="form-label">
+              Expense Name
+            </label>
+            <input
+            type="text"
+            class="form-control"
+            id="title"
+            placeholder="Enter expense name"
+            required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              Category
+            </label>
+            <select class="form-select" id="category">
+              <option>Food</option>
+              <option>Travel</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              Amount
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              Payment Method
+            </label>
+            <select class="form-select" id="payment">
+              <option>UPI</option>
+              <option>Card</option>
+              <option>Cash</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              Date
+            </label>
+            <input type="date"
+            class="form-control"
+            id="date"
+            required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-primary"
+        id="saveExpense">
+          Save Expense
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script src="./script.js"></script>
 
-<div class="modal fade"
-id="expenseModal"
-tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Add Expense
-        </h5>
-        <button type="button"
-        class="btn-close"
-        data-bs-dismiss="modal">
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="title">
-        <div class="mb-3">
-          <label class="form-label">
-            Expense Name
-          </label>
-          <input
-          type="text"
-          class="form-control"
-          id="title"
-          placeholder="Enter expense name"
-          required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">
-            Category
-          </label>
-          <select class="form-select" id="category">
-            <option>Food</option>
-            <option>Travel</option>
-            <option>Shopping</option>
-            <option>Bills</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">
-            Amount
-          </label>
-          <input
-            type="number"
-            class="form-control"
-            id="amount"
-            required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">
-            Payment Method
-          </label>
-          <select class="form-select" id="payment">
-            <option>UPI</option>
-            <option>Card</option>
-            <option>Cash</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">
-            Date
-          </label>
-          <input type="date"
-          class="form-control"
-          id="date"
-          required>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary"
-        data-bs-dismiss="modal">
-        Cancel
-      </button>
-      <button class="btn btn-primary"
-      id="saveExpense">
-        Save Expense
-      </button>
-    </div>
-  </div>
-</div>
+
 
 
 </body>

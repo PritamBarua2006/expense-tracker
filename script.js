@@ -62,23 +62,55 @@ new Chart(pieCtx, {
 
 const expenses = [];
 
+function updateDashboard() {
+
+    let totalExpense = 0;
+
+    for (const expense of expenses) {
+        totalExpense += expense.amount;
+    }
+
+    expenseTotal.textContent = `₹${totalExpense}`;
+
+}
+
 const titleInput = document.getElementById("title");
 const categoryInput = document.getElementById("category");
 const amountInput = document.getElementById("amount");
 const paymentInput = document.getElementById("payment");
 const dateInput = document.getElementById("date");
 
+const expenseTotal = document.getElementById("expenseTotal");
+
+const transactionBody = document.getElementById("transactionBody");
+
 
 const saveBtn = document.getElementById("saveExpense");
 saveBtn.addEventListener("click", function(){
 
-    const expense = {
+if (
+    titleInput.value.trim() === "" ||
+    amountInput.value.trim() === "" ||
+    dateInput.value === ""
+) {
+    alert("Please fill in all required fields.");
+    return;
+}
+
+const amount = Number(amountInput.value);
+
+if (isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid expense amount.");
+    return;
+}
+const expense = {
     title: titleInput.value,
     category: categoryInput.value,
-    amount: Number(amountInput.value),
+    amount: amount,
     payment: paymentInput.value,
-    date: date(dateInput.value)
-}
+    date: dateInput.value
+};
+
 expenses.push(expense);
 const row = document.createElement("tr");
 
@@ -96,7 +128,19 @@ row.innerHTML = `
 
 transactionBody.appendChild(row);
 console.log(expenses);
+
+titleInput.value = "";
+amountInput.value = "";
+dateInput.value = "";
+categoryInput.selectedIndex = 0;
+paymentInput.selectedIndex = 0;
+
+const expenseModal = document.getElementById("expenseModal");
+const modal = bootstrap.Modal.getInstance(expenseModal);
+modal.hide();
+
+updateDashboard();
 });
 
-const transactionBody = document.getElementById("transactionBody");
+
 
