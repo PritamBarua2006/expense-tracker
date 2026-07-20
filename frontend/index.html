@@ -87,7 +87,7 @@
           <div class="cards">
               <div class="card-box">
                 <h6>Total Balance</h6>
-                 <h2>₹0.00</h2>
+                <h2 id="balanceTotal">₹0.00</h2>
               </div>
               <div class="card-box">
                 <h6>Expense</h6>
@@ -95,11 +95,11 @@
               </div>
               <div class="card-box">
                 <h6>Income</h6>
-                <h2>₹0.00</h2>
+                <h2 id="incomeTotal">₹0.00</h2>
               </div>
               <div class="card-box">
                 <h6>Savings</h6>
-                <h2>₹0.00</h2>
+                <h2 id="savingsTotal">₹0.00</h2>
               </div>
             </div>
         </div>
@@ -113,6 +113,14 @@
             <canvas id="pieChart"></canvas>
           </div>
         </section>
+
+        <div class="d-flex gap-2 mb-3">
+          <input type="text"
+          id="searchInput"
+          class="form-control"
+          placeholder="Search expense...">
+        </div>
+        
         <section class="transactions" id="transaction">
           <div class="table-card">
             <h4>Recent Transactions</h4>
@@ -301,5 +309,4 @@
               
             
             
-              
-           
+          

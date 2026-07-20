@@ -1,12 +1,12 @@
 const expenseCtx = document.getElementById("expenseChart");
 
-new Chart(expenseCtx, {
+const expenseChart = new Chart(expenseCtx, {
     type: "line",
     data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: [ "Jan","Feb","Mar","Apr", "May","Jun","Jul","Aug", "Sep","Oct","Nov","Dec"],
         datasets: [{
             label: "Expenses",
-            data: [1200, 1800, 1500, 2200, 1900, 2500],
+            data: [0,0,0,0,0,0,0,0,0,0,0,0],
             borderColor: "#2563eb",
             backgroundColor: "rgba(37,99,235,.15)",
             fill: true,
@@ -17,12 +17,12 @@ new Chart(expenseCtx, {
 
 const pieCtx = document.getElementById("pieChart");
 
-new Chart(pieCtx, {
+const pieChart = new Chart(pieCtx, {
     type: "pie",
     data: {
         labels: ["Food", "Travel", "Shopping", "Bills"],
         datasets: [{
-            data: [35, 20, 25, 20],
+            data: [0,0,0,0],
             backgroundColor: [
                 "#2563eb",
                 "#10b981",
@@ -34,7 +34,7 @@ new Chart(pieCtx, {
 });
 
 const expenses = [];
-let editingIndex = null;
+let editingId = null;
 
 const titleInput = document.getElementById("title");
 const categoryInput = document.getElementById("category");
@@ -46,6 +46,12 @@ const expenseTotal = document.getElementById("expenseTotal");
 const transactionBody = document.getElementById("transactionBody");
 const saveBtn = document.getElementById("saveExpense");
 
+const balanceTotal = document.getElementById("balanceTotal");
+const savingsTotal = document.getElementById("savingsTotal");
+const incomeTotal = document.getElementById("incomeTotal");
+
+const searchInput = document.getElementById("searchInput");
+
 function updateDashboard() {
     let totalExpense = 0;
 
@@ -54,6 +60,55 @@ function updateDashboard() {
     }
 
     expenseTotal.textContent = `₹${totalExpense}`;
+    balanceTotal.textContent = `₹${-totalExpense}`;
+    savingsTotal.textContent = "₹0";
+    incomeTotal.textContent = "₹0";
+}
+
+function updatePieChart() {
+
+    const categoryTotals = {
+        Food: 0,
+        Travel: 0,
+        Shopping: 0,
+        Bills: 0
+    };
+
+    for (const expense of expenses) {
+
+        categoryTotals[expense.category] += expense.amount;
+
+    }
+
+    pieChart.data.datasets[0].data = [
+
+        categoryTotals.Food,
+        categoryTotals.Travel,
+        categoryTotals.Shopping,
+        categoryTotals.Bills
+
+    ];
+
+    pieChart.update();
+
+}
+
+function updateExpenseChart() {
+
+    const monthlyExpenses = Array(12).fill(0);
+
+    for (const expense of expenses) {
+
+        const month = new Date(expense.date).getMonth();
+
+        monthlyExpenses[month] += expense.amount;
+
+    }
+
+    expenseChart.data.datasets[0].data = monthlyExpenses;
+
+    expenseChart.update();
+
 }
 
 function clearForm() {
@@ -80,11 +135,10 @@ function addExpenseToTable(expense, index) {
         <td>₹${expense.amount}</td>
         <td>${expense.payment}</td>
         <td>
-            <button class="btn btn-sm btn-primary" data-index="${index}">
+            <button class="btn btn-sm btn-primary" data-id="${expense._id}">
                 Edit
             </button>
-
-            <button class="btn btn-sm btn-danger" data-index="${index}">
+            <button class="btn btn-sm btn-danger" data-id="${expense._id}">
                 Delete
             </button>
         </td>
@@ -101,22 +155,70 @@ function renderExpenses() {
     });
 }
 
-function saveExpenses() {
-    localStorage.setItem(
-        "expenses",
-        JSON.stringify(expenses)
-    );
-}
+async function fetchExpenses() {
 
-function loadExpenses() {
-    const storedExpenses = localStorage.getItem("expenses");
+    try {
 
-    if (storedExpenses) {
-        expenses.push(...JSON.parse(storedExpenses));
-        renderExpenses();
-        updateDashboard();
+        const response = await fetch("http://localhost:3000/expenses",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+        throw new Error("Failed to fetch expenses");
     }
+
+        const data = await response.json();
+
+        console.log(data);
+
+        expenses.length = 0;
+
+        expenses.push(...data);
+
+        filterExpenses();
+
+        updateDashboard();
+
+        updatePieChart();
+
+        updateExpenseChart();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to load expenses.");
+
+    }
+
 }
+
+function filterExpenses() {
+
+    const keyword =
+        searchInput.value.toLowerCase();
+
+    const filtered = expenses.filter(expense => {
+
+        return expense.title
+            .toLowerCase()
+            .includes(keyword);
+
+    });
+
+    transactionBody.innerHTML = "";
+
+    filtered.forEach(expense => {
+
+        addExpenseToTable(expense);
+
+    });
+
+}
+
+searchInput.addEventListener("input", filterExpenses);
 
 saveBtn.addEventListener("click", async function () {
 
@@ -146,13 +248,35 @@ saveBtn.addEventListener("click", async function () {
 
     try {
 
-        const response = await fetch("http://localhost:3000/expenses", {
+        let response;
+
+if (editingId === null) {
+
+    response = await fetch(
+        "http://localhost:3000/expenses",
+        {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(expense)
-        });
+        }
+    );
+
+} else {
+
+    response = await fetch(
+        `http://localhost:3000/expenses/${editingId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(expense)
+        }
+    );
+
+}
 
         const result = await response.json();
 
@@ -169,27 +293,26 @@ saveBtn.addEventListener("click", async function () {
         return;
     }
 
-    if (editingIndex === null) {
-        expenses.push(expense);
-    } else {
-        expenses[editingIndex] = expense;
-        editingIndex = null;
-    }
-
-    saveExpenses();
-    renderExpenses();
-    updateDashboard();
+    editingId = null;
+    await fetchExpenses();
     clearForm();
     closeModal();
 });
 
-transactionBody.addEventListener("click", function (event) {
+transactionBody.addEventListener("click", async function (event) {
+
+    console.log(event.target);
+    console.log(event.target.className);
 
     if (event.target.classList.contains("btn-primary")) {
-
-        editingIndex = Number(event.target.dataset.index);
-
-        const expense = expenses[editingIndex];
+        editingId = event.target.dataset.id;
+        const expense = expenses.find(
+            expense => expense._id === editingId
+        );
+        if (!expense) {
+            alert("Expense not found.");
+            return;
+        }
 
         titleInput.value = expense.title;
         categoryInput.value = expense.category;
@@ -206,14 +329,33 @@ transactionBody.addEventListener("click", function (event) {
 
     if (event.target.classList.contains("btn-danger")) {
 
-        const index = Number(event.target.dataset.index);
+    const id = event.target.dataset.id;
 
-        expenses.splice(index, 1);
+    try {
 
-        saveExpenses();
-        renderExpenses();
-        updateDashboard();
+        const response = await fetch(
+            `http://localhost:3000/expenses/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            alert("Failed to delete expense.");
+            return;
+        }
+
+        await fetchExpenses();
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Unable to delete expense.");
+
     }
+
+}
 });
 
-loadExpenses();
+fetchExpenses();
+
