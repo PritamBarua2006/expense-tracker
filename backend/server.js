@@ -1,7 +1,12 @@
+require("dotenv").config();
+console.log("MONGO_URI:", process.env.MONGO_URI);
+
 const express = require("express");
 const cors = require("cors");
+
 const mongoose = require("mongoose");
 const Expense = require("./models/Expense");
+
 const connectDB = require("./config/db");
 const expenseRoutes = require("./routes/expenseRoutes");
 
@@ -38,7 +43,7 @@ app.get("/contact", (req, res) => {
 // ========================
 // Start Server
 // ========================
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 console.log("Server file loaded successfully");
 
