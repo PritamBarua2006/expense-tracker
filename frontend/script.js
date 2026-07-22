@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+console.log("Token:", token);
+
+if (!token) {
+    window.location.href = "login.html";
+}
+
 const expenseCtx = document.getElementById("expenseChart");
 
 const expenseChart = new Chart(expenseCtx, {
@@ -161,7 +168,10 @@ async function fetchExpenses() {
 
         const response = await fetch("http://localhost:3000/expenses",
             {
-                cache: "no-store"
+                cache: "no-store",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
         );
 
@@ -257,7 +267,8 @@ if (editingId === null) {
         {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(expense)
         }
@@ -270,15 +281,25 @@ if (editingId === null) {
         {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(expense)
         }
     );
+    if (response.status === 401) {
 
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    alert("Session expired. Please login again.");
+
+    window.location.href = "login.html";
+
+    return;
 }
-
-        const result = await response.json();
+}
+const result = await response.json();
 
         console.log(result);
 
@@ -336,7 +357,10 @@ transactionBody.addEventListener("click", async function (event) {
         const response = await fetch(
             `http://localhost:3000/expenses/${id}`,
             {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
         );
 
@@ -356,6 +380,15 @@ transactionBody.addEventListener("click", async function (event) {
 
 }
 });
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "login.html";
+}
+
+document.getElementById("logoutBtn").addEventListener("click", logout);
 
 fetchExpenses();
 

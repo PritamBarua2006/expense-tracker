@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Expense Tracker</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <i class="bi bi-cash-stack auth-logo"></i>
+        <h2>Create Account</h2>
+        <p>Create your account to get started.</p>
+    </div>
+
+    <div class="input-group">
+        <span class="input-icon">
+            <i class="bi bi-person"></i>
+        </span>
+        <input type="text"
+        id="name"
+        placeholder="Full Name">
+    </div>
+
+    <div class="input-group">
+        <span class="input-icon">
+            <i class="bi bi-envelope"></i>
+        </span>
+        <input type="email"
+        id="email"
+        placeholder="Email">
+    </div>
+
+   <div class="input-group">
+        <span class="input-icon">
+            <i class="bi bi-lock"></i>
+        </span>
+        <input  type="password"
+        id="password"
+        placeholder="Enter Password"
+        required>
+        <span class="toggle-password">
+            <i class="bi bi-eye" id="togglePassword"></i>
+        </span>
+    </div>
+
+    <div class="input-group">
+        <span class="input-icon">
+            <i class="bi bi-lock"></i>
+        </span>
+        <input  type="password"
+        id="ConfirmPassword"
+        placeholder="Confirm Password"
+        required>
+        <span class="toggle-password">
+            <i class="bi bi-eye" id="togglePassword"></i>
+        </span>
+    </div>
+    
+    <button id="registerBtn">
+        Register
+    </button>
+    <p>
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+</div>
+<script src="register.js"></script>
+
+</body>
+</html>

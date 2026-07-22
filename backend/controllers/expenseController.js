@@ -3,7 +3,7 @@ const Expense = require("../models/Expense");
 // Get All Expenses
 const getExpenses = async (req, res) => {
     try {
-        const expenses = await Expense.find();
+        const expenses = await Expense.find({user: req.user.id});
         res.json(expenses);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,7 +13,10 @@ const getExpenses = async (req, res) => {
 // Add Expense
 const addExpense = async (req, res) => {
     try {
-        const expense = await Expense.create(req.body);
+        const expense = await Expense.create({
+            ...req.body,
+            user: req.user.id
+        });
 
         res.status(201).json({
             message: "Expense Added Successfully",
@@ -46,6 +49,12 @@ const updateExpense = async (req, res) => {
             });
         }
 
+        if (updatedExpense.user.toString() !== req.user.id) {
+    return res.status(403).json({
+        message: "Access denied."
+    });
+}
+
         res.json({
             message: "Expense Updated Successfully",
             data: updatedExpense
@@ -69,6 +78,12 @@ const deleteExpense = async (req, res) => {
                 message: "Expense not found."
             });
         }
+
+        if (deletedExpense.user.toString() !== req.user.id) {
+    return res.status(403).json({
+        message: "Access denied."
+    });
+}
 
         res.json({
             message: "Expense Deleted Successfully",
