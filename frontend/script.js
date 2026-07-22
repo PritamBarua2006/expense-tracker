@@ -1,5 +1,11 @@
 const token = localStorage.getItem("token");
-console.log("Token:", token);
+const categoryFilter = document.getElementById("categoryFilter");
+const sortFilter = document.getElementById("sortFilter");
+const dateFilter = document.getElementById("dateFilter");
+
+let currentPage = 1;
+
+const rowsPerPage = 10;
 
 if (!token) {
     window.location.href = "login.html";
@@ -31,11 +37,11 @@ const pieChart = new Chart(pieCtx, {
         datasets: [{
             data: [0,0,0,0],
             backgroundColor: [
-                "#2563eb",
-                "#10b981",
-                "#f59e0b",
-                "#ef4444"
-            ]
+                "Food",
+                "Travel",
+                "Shopping",
+                "Bills"
+            ].map(getCategoryColor)
         }]
     }
 });
@@ -59,6 +65,10 @@ const incomeTotal = document.getElementById("incomeTotal");
 
 const searchInput = document.getElementById("searchInput");
 
+const prevPage = document.getElementById("prevPage");
+const nextPage = document.getElementById("nextPage");
+const pageInfo = document.getElementById("pageInfo");
+
 function updateDashboard() {
     let totalExpense = 0;
 
@@ -74,27 +84,26 @@ function updateDashboard() {
 
 function updatePieChart() {
 
-    const categoryTotals = {
-        Food: 0,
-        Travel: 0,
-        Shopping: 0,
-        Bills: 0
-    };
+    const categoryTotals = {};
 
-    for (const expense of expenses) {
+    expenses.forEach(expense => {
 
-        categoryTotals[expense.category] += expense.amount;
+        if (!categoryTotals[expense.category]) {
+            categoryTotals[expense.category] = 0;
+        }
 
-    }
+        categoryTotals[expense.category] += Number(expense.amount);
 
-    pieChart.data.datasets[0].data = [
+    });
 
-        categoryTotals.Food,
-        categoryTotals.Travel,
-        categoryTotals.Shopping,
-        categoryTotals.Bills
+    const labels = Object.keys(categoryTotals);
 
-    ];
+    pieChart.data.labels = labels;
+
+    pieChart.data.datasets[0].data = Object.values(categoryTotals);
+
+    pieChart.data.datasets[0].backgroundColor =
+        labels.map(getCategoryColor);
 
     pieChart.update();
 
@@ -132,7 +141,7 @@ function closeModal() {
     modal.hide();
 }
 
-function addExpenseToTable(expense, index) {
+function addExpenseToTable(expense) {
     const row = document.createElement("tr");
 
     row.innerHTML = `
@@ -142,16 +151,56 @@ function addExpenseToTable(expense, index) {
         <td>₹${expense.amount}</td>
         <td>${expense.payment}</td>
         <td>
-            <button class="btn btn-sm btn-primary" data-id="${expense._id}">
-                Edit
+            <button
+                class="btn btn-sm btn-primary action-btn edit-btn"
+                data-id="${expense._id}">
+                <i class="bi bi-pencil-square"></i> Edit
             </button>
-            <button class="btn btn-sm btn-danger" data-id="${expense._id}">
-                Delete
+
+            <button
+                class="btn btn-sm btn-danger action-btn delete-btn"
+                data-id="${expense._id}">
+                <i class="bi bi-trash"></i> Delete
             </button>
         </td>
     `;
 
     transactionBody.appendChild(row);
+}
+
+function getCategoryColor(category) {
+
+    const colors = {
+        Food: "#1D4ED8",
+        Travel: "#10B981",
+        Shopping: "#F59E0B",
+        Bills: "#EF4444"
+    };
+
+    return colors[category] || "#6B7280";
+}
+
+function populateCategoryFilter() {
+
+    categoryFilter.innerHTML =
+        '<option value="All">All Categories</option>';
+
+    const categories = [...new Set(
+        expenses.map(expense => expense.category)
+    )].sort();
+
+    categories.forEach(category => {
+
+        const option = document.createElement("option");
+
+        option.value = category;
+
+        option.textContent = category;
+
+        categoryFilter.appendChild(option);
+
+    });
+
 }
 
 function renderExpenses() {
@@ -160,6 +209,147 @@ function renderExpenses() {
     expenses.forEach((expense, index) => {
         addExpenseToTable(expense, index);
     });
+}
+
+function updateBudgetProgress(expenses) {
+
+    const categoryColors = {
+    Food: "#1D4ED8",
+    Travel: "#10B981",
+    Shopping: "#F59E0B",
+    Bills: "#EF4444"
+    };
+
+    const container = document.getElementById("budgetProgressContainer");
+
+    container.innerHTML = "";
+
+    if (expenses.length === 0) {
+        container.innerHTML = "<p>No expense data available.</p>";
+        return;
+    }
+
+    const categoryTotals = {};
+
+    let totalExpense = 0;
+
+    expenses.forEach(expense => {
+
+        const amount = Number(expense.amount);
+
+        totalExpense += amount;
+
+        if (!categoryTotals[expense.category]) {
+            categoryTotals[expense.category] = 0;
+        }
+
+        categoryTotals[expense.category] += amount;
+    });
+
+    Object.entries(categoryTotals).forEach(([category, amount]) => {
+
+        const percentage = ((amount / totalExpense) * 100).toFixed(1);
+
+        const color = getCategoryColor(category);
+
+        const item = document.createElement("div");
+
+        item.className = "budget-item";
+
+        item.innerHTML = `
+            <div class="budget-info">
+                <span>${category}</span>
+                <span>${percentage}%</span>
+            </div>
+
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    style= "width:${percentage}%;
+                    background:${color};">
+                </div>
+            </div>
+        `;
+
+        container.appendChild(item);
+
+    });
+
+}
+
+function updateInsights(expenses) {
+
+    const container = document.getElementById("insightsContainer");
+
+    container.innerHTML = "";
+
+    if (expenses.length === 0) {
+
+        container.innerHTML = "<p>No insights available.</p>";
+
+        return;
+    }
+
+    // Highest Expense
+    const highestExpense = expenses.reduce((max, expense) =>
+        expense.amount > max.amount ? expense : max
+    );
+
+    // Total Transactions
+    const totalTransactions = expenses.length;
+
+    // Average Expense
+    const totalExpense = expenses.reduce(
+        (sum, expense) => sum + Number(expense.amount),
+        0
+    );
+
+    const averageExpense = Math.round(totalExpense / totalTransactions);
+
+    // Most Used Category
+    const categoryCount = {};
+
+    expenses.forEach(expense => {
+
+        categoryCount[expense.category] =
+            (categoryCount[expense.category] || 0) + 1;
+
+    });
+
+    const mostUsedCategory = Object.entries(categoryCount)
+        .sort((a, b) => b[1] - a[1])[0];
+
+    container.innerHTML = ` 
+
+        <div class="insight">
+            <div>
+                <strong>Highest Expense</strong>
+                <p>${highestExpense.title} • ₹${Number(highestExpense.amount).toLocaleString("en-IN")}</p>
+            </div>
+        </div>
+
+        <div class="insight">
+            <div>
+                <strong>Most Used Category</strong>
+                <p>${mostUsedCategory[0]} (${mostUsedCategory[1]} transactions)</p>
+            </div>
+        </div>
+
+        <div class="insight">
+            <div>
+                <strong>Average Expense</strong>
+                <p>₹${averageExpense.toLocaleString("en-IN")}</p>
+            </div>
+        </div>
+
+        <div class="insight">
+            <div>
+                <strong>Total Transactions</strong>
+                <p>${totalTransactions}</p>
+            </div>
+        </div>
+
+    `;
 }
 
 async function fetchExpenses() {
@@ -187,9 +377,15 @@ async function fetchExpenses() {
 
         expenses.push(...data);
 
+        populateCategoryFilter();
+
         filterExpenses();
 
         updateDashboard();
+
+        updateBudgetProgress(expenses);
+
+        updateInsights(expenses);
 
         updatePieChart();
 
@@ -207,28 +403,96 @@ async function fetchExpenses() {
 
 function filterExpenses() {
 
-    const keyword =
-        searchInput.value.toLowerCase();
+    const keyword = searchInput.value.toLowerCase();
 
-    const filtered = expenses.filter(expense => {
+    const selectedCategory = categoryFilter.value;
 
-        return expense.title
-            .toLowerCase()
-            .includes(keyword);
+    const selectedSort = sortFilter.value;
 
+    const selectedDate = dateFilter.value;
+
+    let filtered = expenses.filter(expense => {
+
+        const matchesSearch =
+            expense.title.toLowerCase().includes(keyword);
+
+        const matchesCategory =
+            selectedCategory === "All" ||
+            expense.category === selectedCategory;
+
+        const expenseDate = new Date(expense.date);
+        const today = new Date();
+        let matchesDate = true;
+        switch (selectedDate) {
+            case "today": 
+                matchesDate = 
+                    expenseDate.toDateString() === today.toDateString();
+                break;
+
+            case "week":
+                const weekStart = new Date(today);
+                weekStart.setDate(today.getDate() - 7);
+                matchesDate = expenseDate >= weekStart;
+                break;
+
+            case "month":
+
+                matchesDate =
+                    expenseDate.getMonth() === today.getMonth() &&
+                    expenseDate.getFullYear() === today.getFullYear();
+
+                break;
+
+            case "year":
+
+                matchesDate =
+                    expenseDate.getFullYear() === today.getFullYear();
+
+                break;
+        }    
+        return matchesSearch && matchesCategory && matchesDate;
     });
+
+    switch (selectedSort) {
+
+        case "highest":
+            filtered.sort((a, b) => b.amount - a.amount);
+            break;
+
+        case "lowest":
+            filtered.sort((a, b) => a.amount - b.amount);
+            break;
+
+        case "oldest":
+            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            break;
+
+        default:
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    }
 
     transactionBody.innerHTML = "";
 
-    filtered.forEach(expense => {
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedExpenses = filtered.slice(start, end);
+    transactionBody.innerHTML = "";
+    paginatedExpenses.forEach(addExpenseToTable);
 
-        addExpenseToTable(expense);
-
-    });
-
+    const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
+
+
 searchInput.addEventListener("input", filterExpenses);
+
+categoryFilter.addEventListener("change", filterExpenses);
+
+sortFilter.addEventListener("change", filterExpenses);
+
+dateFilter.addEventListener("change", filterExpenses);
 
 saveBtn.addEventListener("click", async function () {
 
@@ -298,6 +562,34 @@ if (editingId === null) {
 
     return;
 }
+
+prevPage.addEventListener("click", () => {
+
+    if (currentPage > 1) {
+
+        currentPage--;
+
+        filterExpenses();
+
+    }
+
+});
+
+nextPage.addEventListener("click", () => {
+
+    const filteredCount = getFilteredExpenses().length;
+
+    const totalPages = Math.ceil(filteredCount / rowsPerPage);
+
+    if (currentPage < totalPages) {
+
+        currentPage++;
+
+        filterExpenses();
+
+    }
+
+});
 }
 const result = await response.json();
 
