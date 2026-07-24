@@ -11,6 +11,8 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
+const budgetRoutes = require("./routes/budgetRoutes");
+
 
     
 // Connect to MongoDB
@@ -21,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/expenses", expenseRoutes);
 app.use("/auth", authRoutes);
+
+app.use("/budget", budgetRoutes);
 
 // ========================
 // Home Route

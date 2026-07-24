@@ -61,11 +61,11 @@
             </a>
           </li>
         </ul>
-        </nav>
-        <button class="add-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#expenseModal">
-        <i class="bi bi-plus-circle"></i>
+      </nav>
+      <button class="add-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#expenseModal">
+      <i class="bi bi-plus-circle"></i>
         Add Expense
       </button>
       <button id="logoutBtn" class="logoutBtn">
@@ -73,69 +73,74 @@
       </button>
       </aside>
 
-
       <main class="col-lg-10">
         <div class="dashboard">
           <header class="top-navbar">
             <h3>Dashboard</h3>
             <div class="profile">
+              <button id="themeToggle"
+                class="btn btn-outline-secondary btn-sm me-3">
+                <i class="bi bi-moon-fill"></i>
+              </button>
               <i class="bi bi-bell"></i>
               <img src="./person-circle.svg" alt="Profile">
             </div>
+            
           </header>
           <section class="welcome">
-            <h1>Good Morning, Pritam 👋</h1>
+            <h1 id="welcomeText">Good Morning👋</h1>
             <p>Here's your financial summary for this month.</p>
           </section>
           <div class="cards">
-              <div class="card-box">
-                <h6>Total Balance</h6>
-                <h2 id="balanceTotal">₹0.00</h2>
-              </div>
-              <div class="card-box">
-                <h6>Expense</h6>
-                <h2 id="expenseTotal">₹0.00</h2>
-              </div>
-              <div class="card-box">
-                <h6>Income</h6>
-                <h2 id="incomeTotal">₹0.00</h2>
-              </div>
-              <div class="card-box">
-                <h6>Savings</h6>
-                <h2 id="savingsTotal">₹0.00</h2>
-              </div>
+            <!-- Monthly Budget -->
+            <div class="card-box">
+              <h5>Monthly Budget</h5>
+              <h2 id="budgetTotal">₹0</h2>
+              <button
+              class="btn btn-primary mt-3"
+              data-bs-toggle="modal"
+              data-bs-target="#budgetModal">
+              Set Budget
+              </button>
             </div>
+            <!-- Spent -->
+            <div class="card-box">
+              <h5>Spent</h5>
+              <h2 id="spentTotal">₹0</h2>
+            </div>
+            <!-- Remaining -->
+            <div class="card-box">
+              <h5>Remaining</h5>
+              <h2 id="remainingTotal">₹0</h2>
+            </div>
+          </div>
         </div>
         <section class="charts">
           <div class="chart-card">
-            <h4>Expense Trend</h4>
-            <canvas id="expenseChart"></canvas>
+              <h4>Expense Trend</h4>
+              <canvas id="expenseChart"></canvas>
           </div>
           <div class="chart-card">
             <h4>Category Breakdown</h4>
             <canvas id="pieChart"></canvas>
           </div>
         </section>
-
         <div class="search-container">
           <i class="bi bi-search search-icon"></i>
           <input type="text"
           id="searchInput"
           placeholder="Search transactions...">
         </div>
-
         <div class="filter-container">
           <select id="categoryFilter" class="filter-select">
             <option value="All">All Categories</option>
           </select>
-
           <select id="sortFilter" class="filter-select">
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
             <option value="highest">Highest Amount</option>
             <option value="lowest">Lowest Amount</option>
           </select>
-
           <select id="dateFilter" class="filter-select">
             <option value="all">All Time</option>
             <option value="today">Today</option>
@@ -144,7 +149,6 @@
             <option value="year">This Year</option>
           </select>
         </div>
-        
         <section class="transactions" id="transaction">
           <div class="table-card">
             <div class="table-responsive">
@@ -192,106 +196,142 @@
 
           </div>
         </div>
-
-
-  <div class="modal fade"
-  id="expenseModal"
-  tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            Add Expense
-          </h5>
-          <button type="button"
-          class="btn-close"
-          data-bs-dismiss="modal">
-          </button>
+        <div class="modal fade"
+        id="expenseModal"
+        tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">
+                  Add Expense
+                </h5>
+                <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal">
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="expenseForm">
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Expense Name
+                    </label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    placeholder="Enter expense name"
+                    required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Category
+                    </label>
+                    <select class="form-select" id="category">
+                      <option>Food</option>
+                      <option>Travel</option>
+                      <option>Shopping</option>
+                      <option>Bills</option>
+                      <option>Healthcare</option>
+                      <option>Entertainment</option>
+                      <option>Education</option>
+                      <option>Utilities</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Amount
+                    </label>
+                    <input
+                    type="number"
+                    class="form-control"
+                    id="amount"
+                    required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Payment Method
+                    </label>
+                    <select class="form-select" id="payment">
+                      <option>UPI</option>
+                      <option>Card</option>
+                      <option>Cash</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Date
+                    </label>
+                    <input type="date"
+                    class="form-control"
+                    id="date"
+                    required>
+                  </div>
+                </form>
+              </div>
+              
+              <div class="modal-footer">
+                <button class="btn btn-secondary"
+                data-bs-dismiss="modal">
+                  Cancel
+                </button>
+                <button class="btn btn-primary"
+                id="saveExpense">
+                  Save Expense
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <form id="expenseForm">
-          <div class="mb-3">
-            <label class="form-label">
-              Expense Name
-            </label>
-            <input
-            type="text"
-            class="form-control"
-            id="title"
-            placeholder="Enter expense name"
-            required>
+        <div class="modal fade" id="budgetModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Set Monthly Budget</h5>
+                <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal">
+                </button>
+              </div>
+              <div class="modal-body">
+                <input type="number"
+                class="form-control"
+                id="budgetInput"
+                placeholder="Enter Monthly Budget">
+              </div>
+              <div class="modal-footer">
+                <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+                  Cancel
+                </button>
+                <button type="button"
+                class="btn btn-primary"
+                id="saveBudgetBtn">
+                  Save Budget
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">
-              Category
-            </label>
-            <select class="form-select" id="category">
-              <option>Food</option>
-              <option>Travel</option>
-              <option>Shopping</option>
-              <option>Bills</option>
-              <option>Healthcare</option>
-              <option>Entertainment</option>
-              <option>Education</option>
-              <option>Utilities</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">
-              Amount
-            </label>
-            <input
-              type="number"
-              class="form-control"
-              id="amount"
-              required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">
-              Payment Method
-            </label>
-            <select class="form-select" id="payment">
-              <option>UPI</option>
-              <option>Card</option>
-              <option>Cash</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">
-              Date
-            </label>
-            <input type="date"
-            class="form-control"
-            id="date"
-            required>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary"
-          data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button class="btn btn-primary"
-        id="saveExpense">
-          Save Expense
-        </button>
-      </div>
+        </div>
+      </main>
     </div>
   </div>
+      
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-<script src="./script.js"></script>
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./script.js"></script>
 
 </body>
 </html>
+  
+
+
+
+
+
           
             
               

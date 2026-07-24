@@ -1,6 +1,36 @@
+*,
+*::before,
+*::after{
+    transition:
+        background-color .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+:root {
+    --bg-color: #f5f7fb;
+    --card-color: #ffffff;
+    --text-color: #1f2937;
+    --secondary-text: #6b7280;
+    --border-color: #e5e7eb;
+    --hover-color:#eff6ff;
+    --table-hover:rgba(37,99,235,.08);
+}
+
+body.dark-mode {
+    --bg-color: #0f172a;
+    --card-color: #1e293b;
+    --text-color: #f8fafc;
+    --secondary-text: #cbd5e1;
+    --border-color: #334155;
+    --hover-color:#334155;
+    --table-hover:rgba(255,255,255,.05);
+}
+
 main {
     min-height: 100vh;
-    background-color: #f5f7fb;
+    background-color: var(--bg-color);
     margin-left: 260px;
     padding: 35px;
 }
@@ -15,8 +45,22 @@ main {
 
 body{
     margin:0;
-    background:#f5f7fb;
+    background: var(--bg-color);
+    color: var(--text-color);
     font-family:Arial, Helvetica, sans-serif;
+    transition: background .3s ease, color .3s ease;
+}
+
+.logo h2,
+.welcome h1,
+.top-navbar h3,
+.chart-card h4,
+.table-card h4,
+.budget-card h4,
+.card-box h2,
+.card-box h6,
+.insight strong{
+    color: var(--text-color);
 }
 
 /* ---------- Sidebar ---------- */
@@ -29,11 +73,15 @@ body{
     width: 260px;
     height: 100vh;
 
-    background: white;
-    border-right: 1px solid #e5e7eb;
+    background: var(--card-color);
+    border-right: 1px solid var(--border-color);
 
     padding: 30px 20px;
     overflow-y: auto;
+}
+
+.cards button{
+    flex: 1;
 }
 
 /* Logo */
@@ -47,10 +95,9 @@ body{
     font-weight:bold;
 }
 
-.logo p{
-
-    color:gray;
-
+.logo p,
+.welcome p{
+    color: var(--secondary-text);
     margin-bottom:35px;
 }
 
@@ -78,7 +125,7 @@ nav a{
 
     text-decoration:none;
 
-    color:#374151;
+    color: var(--text-color);
 
     padding:14px;
 
@@ -89,7 +136,7 @@ nav a{
 
 nav a:hover{
 
-    background:#eff6ff;
+     background: var(--hover-color);
 
     color:#2563eb;
 }
@@ -150,6 +197,8 @@ nav li:first-child a{
     align-items:center;
 
     margin-bottom:40px;
+
+    padding:0 20px;
 }
 
 .profile{
@@ -186,13 +235,6 @@ nav li:first-child a{
     margin-bottom:10px;
 }
 
-.welcome p{
-
-    color:gray;
-
-    margin-bottom:40px;
-}
-
 .cards{
 
     display:flex;
@@ -202,15 +244,11 @@ nav li:first-child a{
 
 .card-box{
 
-    background:white;
+     background: var(--card-color);
+    color: var(--text-color);
+    padding: 25px;
+    border-radius: 18px;
 
-    padding:25px;
-
-    border-radius:18px;
-
-    flex:1;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.05);
 }
 
 .card-box h6{
@@ -249,13 +287,14 @@ nav li:first-child a{
 
     flex:1;
 
-    background:white;
-
     border-radius:18px;
 
     padding:25px;
 
     box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+    background: var(--card-color);
+    color: var(--text-color);
 }
 
 .chart-card h4{
@@ -270,13 +309,14 @@ nav li:first-child a{
 
 .table-card{
 
-    background:white;
-
     border-radius:18px;
 
     padding:25px;
 
     box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+    background: var(--card-color);
+    color: var(--text-color);
 }
 
 table{
@@ -294,9 +334,9 @@ th{
 
     padding:15px;
 
-    background:#f5f7fb;
+    background: var(--bg-color);
+    color: var(--text-color);
 
-    color:#555;
 }
 
 td{
@@ -334,8 +374,7 @@ td button:last-child{
 }
 
 tbody tr:hover{
-
-    background:#f8fbff;
+    background: var(--table-hover);
 }
 
 .budget-section{
@@ -345,13 +384,14 @@ tbody tr:hover{
 
 .budget-card{
 
-    background:white;
+    background: var(--card-color);
 
     border-radius:18px;
 
     padding:25px;
 
     box-shadow:0 10px 25px rgba(0,0,0,.05);
+    color: var(--text-color);
 }
 
 .budget-item{
@@ -374,13 +414,16 @@ tbody tr:hover{
 
     margin-top:30px;
 
-    background:white;
+     background: var(--card-color);
 
     padding:25px;
 
     border-radius:18px;
 
     box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+   color: var(--text-color);
+
 }
 
 .insight{
@@ -405,7 +448,7 @@ tbody tr:hover{
 
     margin:0;
 
-    color:gray;
+    color: var(--secondary-text);
 }
 
 
@@ -419,7 +462,7 @@ tbody tr:hover{
     max-width:430px;
     margin: 70px auto;
     padding: 40px 35px;
-    background: white;
+    background: var(--card-color);
     border-radius: 18px;
     box-shadow: 0 12px 35px rgba(0,0,0,.12);
     animation: fadeIn .5s ease;
@@ -572,7 +615,8 @@ tbody tr:hover{
     border-radius:12px;
     font-size:15px;
     transition:.25s;
-    background:white;
+    background: var(--card-color);
+    color: var(--text-color);
 }
 
 .search-container input:focus{
@@ -641,7 +685,8 @@ tbody tr:hover{
     padding:12px;
     border:1px solid #d1d5db;
     border-radius:10px;
-    background:white;
+    background: var(--card-color);
+    color: var(--text-color);
     font-size:15px;
     cursor:pointer;
     transition:.25s;
@@ -651,6 +696,59 @@ tbody tr:hover{
     outline:none;
     border-color:#2563eb;
     box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+
+body.dark-mode table {
+    color: var(--text-color);
+}
+
+body.dark-mode th,
+body.dark-mode td {
+    border-color: var(--border-color);
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #334155;
+    color: white;
+    border: 1px solid #475569;
+}
+
+body.dark-mode input::placeholder {
+    color: #cbd5e1;
+}
+
+body.dark-mode .sidebar {
+    background: #111827;
+}
+
+.top-navbar{
+    background: transparent;
+}
+
+body.dark-mode .filter-select {
+    background: #334155;
+    color: white;
+}
+
+body.dark-mode .search-container input {
+    background: #334155;
+    color: white;
+}
+
+body.dark-mode .profile i,
+body.dark-mode .profile .bi-person-circle{
+    color: var(--text-color);
+}
+
+body.dark-mode .profile img{
+    filter: brightness(0) invert(1);
+}
+
+#pageInfo{
+    color: var(--text-color);
+    font-weight: 500;
 }
 /* ==========================
    RESPONSIVE DESIGN
