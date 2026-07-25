@@ -48,7 +48,7 @@ async function registerUser() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/auth/register",
+            "https://expense-tracker-xti3.onrender.com/auth/register",
             {
                 method: "POST",
                 headers: {

@@ -407,7 +407,7 @@ function updateInsights(expenses) {
 
 async function fetchExpenses() {
   try {
-    const response = await fetch("http://localhost:3000/expenses", {
+    const response = await fetch("https://expense-tracker-xti3.onrender.com/expenses", {
       cache: "no-store",
       headers: {
         Authorization: `Bearer ${token}`
@@ -535,7 +535,7 @@ async function saveBudget() {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/budget", {
+    const response = await fetch("https://expense-tracker-xti3.onrender.com/budget", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -609,7 +609,7 @@ saveBtn.addEventListener("click", async function () {
     let response;
 
     if (editingId === null) {
-      response = await fetch("http://localhost:3000/expenses", {
+      response = await fetch("https://expense-tracker-xti3.onrender.com/expenses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -619,7 +619,7 @@ saveBtn.addEventListener("click", async function () {
       });
     } else {
       response = await fetch(
-        `http://localhost:3000/expenses/${editingId}`,
+        `https://expense-tracker-xti3.onrender.com/expenses/${editingId}`,
         {
           method: "PUT",
           headers: {
@@ -705,7 +705,7 @@ transactionBody.addEventListener("click", async function (event) {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/expenses/${id}`,
+        `https://expense-tracker-xti3.onrender.com/expenses/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -734,7 +734,7 @@ async function fetchBudget() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/budget",
+            "https://expense-tracker-xti3.onrender.com/budget",
             {
                 headers: {
                     Authorization: `Bearer ${token}`
