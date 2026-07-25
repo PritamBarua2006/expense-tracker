@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/PritamBarua2006/expense-tracker#readme",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
