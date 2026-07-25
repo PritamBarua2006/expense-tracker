@@ -775,9 +775,9 @@ function logout() {
 document.getElementById("logoutBtn").addEventListener("click", logout);
 
 function updateWelcomeMessage() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const currentUser = JSON.parse(localStorage.getItem("user"));
 
-    if (!user) return;
+    if (!currentUser) return;
 
     const hour = new Date().getHours();
 
@@ -789,13 +789,15 @@ function updateWelcomeMessage() {
         greeting = "Good Afternoon";
     }
 
-    welcomeText.textContent = `${greeting}, ${user.name} 👋`;
+    welcomeText.textContent = `${greeting}, ${currentUser.name} 👋`;
 }
 
 // ---------- Dark Mode ----------
 
 function loadTheme() {
-    const savedTheme = localStorage.getItem("theme");
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    if (!currentUser) return;
+    const savedTheme = localStorage.getItem(`theme_${currentUser.id}`);
 
     if (savedTheme === "dark") {
         document.body.classList.add("dark-mode");
@@ -814,7 +816,7 @@ themeToggle.addEventListener("click", () => {
 
     } else {
 
-        localStorage.setItem("theme", "light");
+        localStorage.setItem(`theme_${currentUser._id}`,"dark");
         themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
 
     }
