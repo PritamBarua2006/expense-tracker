@@ -6,6 +6,9 @@ const registerBtn = document.getElementById("registerBtn");
 
 const togglePassword = document.getElementById("togglePassword");
 
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+
 togglePassword.addEventListener("click", function () {
 
     if (passwordInput.type === "password") {
@@ -21,6 +24,26 @@ togglePassword.addEventListener("click", function () {
 
         togglePassword.classList.remove("bi-eye-slash");
         togglePassword.classList.add("bi-eye");
+
+    }
+
+});
+
+toggleConfirmPassword.addEventListener("click", function () {
+
+    if (confirmPasswordInput.type === "password") {
+
+        confirmPasswordInput.type = "text";
+
+        toggleConfirmPassword.classList.remove("bi-eye");
+        toggleConfirmPassword.classList.add("bi-eye-slash");
+
+    } else {
+
+        confirmPasswordInput.type = "password";
+
+        toggleConfirmPassword.classList.remove("bi-eye-slash");
+        toggleConfirmPassword.classList.add("bi-eye");
 
     }
 
