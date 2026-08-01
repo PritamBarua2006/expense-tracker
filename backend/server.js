@@ -15,7 +15,7 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-const budgetRoutes = require("./routes/budgetRoutes");
+const budgetRoutes = require("./routes/BudgetRoutes");
 
 
     

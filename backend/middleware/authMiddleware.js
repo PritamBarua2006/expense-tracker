@@ -22,10 +22,11 @@ const protect = async (req, res, next) => {
             next();
 
         } catch (error) {
+            console.error("JWT Verify Error:", error);
             return res.status(401).json({
-                message: "Not authorized. Invalid token."
-            });
-        }
+                message: error.message
+    });
+}
     }
 
     // If no token is provided
